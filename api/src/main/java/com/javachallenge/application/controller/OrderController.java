@@ -3,7 +3,9 @@ package com.javachallenge.application.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.javachallenge.application.entity.Order;
+import com.javachallenge.application.entity.Result;
 import com.javachallenge.application.service.OrderService;
 
 @RestController
@@ -14,19 +16,48 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
+    
+    @RequestMapping("/return-payment-links")
+    public String returnPaymentLinks(String orderJson) {
+        orderJson = """
+                { 
+                    "flatTaxes":8,
+                    "flatDiscounts":20,
+                    "percentageTaxes":0,
+                    "percentageDiscounts":0,
+                    "paymentMethod": "paypal",                    
+                    "subOrders":[
+                        {
+                            "payerName": "Bruno",
+                            "paymentCurrency":"BRL",
+                            "products":[
+                                {
+                                    "price":40,
+                                    "name":"hamburguer"
+                                },
+                                {
+                                    "price":2,
+                                    "name":"sorvete"
+                                }
+                            ]
+                        },
+                        {
+                            "payerName":"Fernanda", 
+                            "paymentCurrency":"BRL",                       
+                            "products":[
+                                {
+                                    "price":8,
+                                    "name":"sanduba"
+                                }
+                            ]
+                        }
+                    ]
+                }""";        
 
-    @RequestMapping("/return-payment-url")
-    public String returnPaymentUrl(Order order) {
-
-        Order firstTest = new Order();
-        firstTest.productsByPerson = new double[][]{
-            new double[]{ 40d, 2d }, 
-            new double[]{ 8d }
-        };
-        firstTest.flatDiscounts = 20d;
-        firstTest.flatTaxes = 8d;
-
-        return orderService.returnPaymentUrl(firstTest);
-        //return orderService.returnPaymentUrl(order);
+            Gson gson = new Gson();
+            Order order = gson.fromJson(orderJson, Order.class);            
+            String[] paymentLinks = orderService.returnPaymentLinks(order);
+            Result<String[]> result = new Result<String[]>(paymentLinks, true);
+            return gson.toJson(result);     
     }
 }
