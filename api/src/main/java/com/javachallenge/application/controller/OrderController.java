@@ -18,7 +18,7 @@ public class OrderController {
     }
     
     @RequestMapping("/return-payment-links")
-    public String returnPaymentLinks(String orderJson) {
+    public String returnPaymentLinks(String orderJson) throws Exception {
         orderJson = """
                 { 
                     "flatTaxes":8,
@@ -56,7 +56,7 @@ public class OrderController {
 
             Gson gson = new Gson();
             Order order = gson.fromJson(orderJson, Order.class);            
-            String[] paymentLinks = orderService.returnPaymentLinks(order);
+            String[] paymentLinks = orderService.getPaymentLinks(order);
             Result<String[]> result = new Result<String[]>(paymentLinks, true);
             return gson.toJson(result);     
     }

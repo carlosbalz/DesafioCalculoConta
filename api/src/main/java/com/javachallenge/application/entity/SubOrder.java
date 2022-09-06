@@ -4,7 +4,6 @@ public class SubOrder {
     private String payerName;
     private Product[] products;
     private String paymentCurrency; 
-    private double totalPrice;
     private double finalPrice;
 
     public String getPayerName() {
@@ -17,14 +16,7 @@ public class SubOrder {
 
     public String getPaymentCurrency() {
         return paymentCurrency;
-    }
-
-    public double getTotalPrice() {
-        for(int i = 0; i < products.length; i++) {
-            totalPrice += products[i].getPrice();
-        }
-        return totalPrice;
-    }
+    }    
 
     public double getFinalPrice() {
         return finalPrice;
@@ -32,5 +24,13 @@ public class SubOrder {
 
     public void setFinalPrice(double price) {        
         finalPrice = price;
+    }    
+
+    public double getTotalPrice() {
+        double total = 0d;
+        for(int i = 0; i < products.length; i++) {
+            total += products[i].getPrice();
+        }
+        return total;
     }
 }
