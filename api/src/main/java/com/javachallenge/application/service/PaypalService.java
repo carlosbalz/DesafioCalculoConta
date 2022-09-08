@@ -19,8 +19,9 @@ public class PaypalService implements Payable {
     private final String clientId = "Ad_7gFzA5OnbIxdYvWgYgWeopkHUW6lAwnAbrVaf9RCPVKtZbzJ9BttqNxAKj8WqxgGN4qcnEnVWsmb4";
     private final String clientSecret = "ECu6M6RZWbYAl2S4qw9nuKOVLVoLEgcps6uqoB1cn3r1Bi1bGAXrEMSOh8TewWS7xDRFnixM9WgP7byo";
     private final String mode = "sandbox";
-    private String cancelUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    private String returnUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    //these are just example urls
+    private String cancelUrl = "https://www.google.com";
+    private String returnUrl = "https://www.google.com";
 
     public Map<String, String> getPaypalSdkConfig() {
         Map<String, String> configMap = new HashMap<>();
