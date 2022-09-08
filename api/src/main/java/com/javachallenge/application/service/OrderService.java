@@ -18,15 +18,16 @@ public class OrderService {
         return createPaymentLinks(paymentMethod, token, subOrders);
     }
 
-    private String[] createPaymentLinks(Payable paymentMethod, String token, SubOrder[] subOrders) throws Exception {
+    protected String[] createPaymentLinks(Payable paymentMethod, String token, SubOrder[] subOrders) throws Exception {
         String[] links = new String[subOrders.length];
         for (int i = 0; i < subOrders.length; i++) {
-            links[i] = paymentMethod.getPaymentLink(token, subOrders[i]);
+            String link = paymentMethod.getPaymentLink(token, subOrders[i]);
+            links[i] = new String(link);
         }
         return links;
     }
 
-    private SubOrder[] getCalculatedSubOrders(Order order) {
+    protected SubOrder[] getCalculatedSubOrders(Order order) {
         SubOrder[] subOrders = order.getSubOrders();
         double orderTotal = getOrderTotalPrice(subOrders);
 
@@ -38,7 +39,7 @@ public class OrderService {
         return subOrders;
     }
 
-    private double getOrderTotalPrice(SubOrder[] subOrders) {
+    protected double getOrderTotalPrice(SubOrder[] subOrders) {
         double total = 0d;
         for (int i = 0; i < subOrders.length; i++) {
             total += subOrders[i].getTotalPrice();
@@ -46,7 +47,7 @@ public class OrderService {
         return total;
     }
 
-    private double getDiscountsAndTaxes(Order order, double subOrderTotal, double orderTotal) {
+    protected double getDiscountsAndTaxes(Order order, double subOrderTotal, double orderTotal) {
         double discountsAndTaxes = 0d;
         double percentageFromOrderTotal = subOrderTotal / orderTotal;
 
@@ -61,7 +62,7 @@ public class OrderService {
         return discountsAndTaxes;
     }
 
-    private double getFlatDiscount(Order order, double percentageFromOrderTotal) {
+    protected double getFlatDiscount(Order order, double percentageFromOrderTotal) {
         double flatDiscount = order.getFlatDiscount();
         if (Double.compare(flatDiscount, 0) > 0) {
             return flatDiscount * percentageFromOrderTotal;
@@ -69,15 +70,15 @@ public class OrderService {
         return 0;
     }
 
-    private double getDiscountFromPercentage(Order order, double totalPerSubOrder) {
+    protected double getDiscountFromPercentage(Order order, double subOrderTotal) {
         double percentageDiscount = order.getPercentageDiscount();
         if (Double.compare(percentageDiscount, 0) > 0) {
-            return totalPerSubOrder * percentageDiscount;
+            return subOrderTotal * (percentageDiscount / 100);
         }
         return 0;
     }
 
-    private double getFlatTaxes(Order order, double percentageFromOrderTotal) {
+    protected double getFlatTaxes(Order order, double percentageFromOrderTotal) {
         double flatTax = order.getFlatTax();
         if (Double.compare(flatTax, 0) > 0) {
             return flatTax * percentageFromOrderTotal;
@@ -85,10 +86,10 @@ public class OrderService {
         return 0;
     }
 
-    private double getTaxesFromPercentage(Order order, double totalPerSubOrder) {
+    protected double getTaxesFromPercentage(Order order, double subOrderTotal) {
         double percentageTax = order.getPercentageTax();
         if (Double.compare(percentageTax, 0) > 0) {
-            return totalPerSubOrder * percentageTax;
+            return subOrderTotal * (percentageTax / 100);
         }
         return 0;
     }

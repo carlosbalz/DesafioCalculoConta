@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Challenge</title>
 </head>
 
 <body>
-    <div id="orderDiv">
+    <label>---------- Order info ----------</label>
+    <div id="orderDiv" style="margin-bottom: 30px;">
         <label>Flat taxes
             <input type="number" id="flatTaxes"></input>
         </label><br>
@@ -22,12 +23,28 @@
         <label>Percent discounts
             <input type="number" id="percentDiscounts"></input>
         </label><br>
-
         <label>Payment method
             <input type="radio" id="paymentMethod" value="paypal" checked>Paypal
         </label><br>
-        <button>Add sub order</button>
+        <button onclick="addSubOrder()">Add sub-order</button>
     </div>
+    <label>---------- Sub-orders ----------</label>
+    <div id="subOrdersDiv">
+        <fieldset style="width: 15%; margin-bottom: 30px;" id="subOrder0">
+            <label>Payer name
+                <input type="text" id="payerName0"></input>
+            </label><br>
+            <label>Currency
+                <input type="radio" id="payerCurrency0" value="BRL" checked>Real</input>
+            </label><br>
+            <div id="productsDiv0">
+                Product price<input type="number"></input>
+            </div>
+            <button onclick="addProduct(0)">Add product</button><br>
+        </fieldset>
+    </div>
+    <button onclick="generatePaymentLinks()">Generate payment links</button>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="..\functions.js"></script>
 </html>

@@ -10,21 +10,14 @@ import org.springframework.context.annotation.Configuration;
 
 import com.javachallenge.application.Interface.Payable;
 import com.javachallenge.application.entity.SubOrder;
-import com.paypal.api.payments.Amount;
-import com.paypal.api.payments.Links;
-import com.paypal.api.payments.Payer;
-import com.paypal.api.payments.Payment;
-import com.paypal.api.payments.RedirectUrls;
-import com.paypal.api.payments.Transaction;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.rest.OAuthTokenCredential;
-import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.*;
 
 @Configuration
 public class PaypalService implements Payable {
 
-    private final String clientId = "";
-    private final String clientSecret = "";
+    private final String clientId = "Ad_7gFzA5OnbIxdYvWgYgWeopkHUW6lAwnAbrVaf9RCPVKtZbzJ9BttqNxAKj8WqxgGN4qcnEnVWsmb4";
+    private final String clientSecret = "ECu6M6RZWbYAl2S4qw9nuKOVLVoLEgcps6uqoB1cn3r1Bi1bGAXrEMSOh8TewWS7xDRFnixM9WgP7byo";
     private final String mode = "sandbox";
     private String cancelUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     private String returnUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
@@ -65,6 +58,7 @@ public class PaypalService implements Payable {
 
         APIContext apiContext = new APIContext(token);
         apiContext.setConfigurationMap(getPaypalSdkConfig());
+
         return payment.create(apiContext);
     }
 
@@ -79,12 +73,12 @@ public class PaypalService implements Payable {
 
         RedirectUrls redirectUrls = getRedirectUrls(cancelUrl, returnUrl);
 
-        return configPayment(payer, transactions, redirectUrls);
+        return getConfiguredPayment(payer, transactions, redirectUrls);
     }        
 
     private Amount getAmount(double finalPrice, String currency) {
-        double floatPointValue = new BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        String total = String.format("%.3f", floatPointValue);
+        BigDecimal bigDecimalValue = new BigDecimal(finalPrice).setScale(2, RoundingMode.HALF_UP);
+        String total = String.format("%.2f", bigDecimalValue).replace(',', '.');    
         return new Amount(currency, total);
     }
 
@@ -102,7 +96,7 @@ public class PaypalService implements Payable {
         return redirectUrls;
     }
 
-    private Payment configPayment(Payer payer, List<Transaction> transactions, RedirectUrls redirectUrls) {
+    private Payment getConfiguredPayment(Payer payer, List<Transaction> transactions, RedirectUrls redirectUrls) {
         Payment payment = new Payment("sale", payer);
         payment.setTransactions(transactions);
         payment.setRedirectUrls(redirectUrls);

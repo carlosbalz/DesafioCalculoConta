@@ -1,6 +1,9 @@
 package com.javachallenge.application.entity;
 
-public class Order {
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public class Order {    
     private SubOrder[] subOrders;    
     private double flatTaxes;    
     private double flatDiscounts;
@@ -35,9 +38,17 @@ public class Order {
     public void setFlatTaxes(double flatTaxes) {
         this.flatTaxes = flatTaxes;
     }
+
+    public void setPercentageTax(double percentageTax) {
+        this.percentageTaxes = percentageTax;
+    }
     
     public void setFlatDiscounts(double flatDiscounts) {
         this.flatDiscounts = flatDiscounts;
+    }
+
+    public void setPercentageDiscounts(double percentageDiscount) {
+        this.percentageDiscounts = percentageDiscount;
     }
 
     public void setPaymentMethod(String paymentMethod) {
@@ -46,5 +57,5 @@ public class Order {
 
     public void setSubOrders(SubOrder[] subOrders) {
         this.subOrders = subOrders;
-    }
+    }        
 }
