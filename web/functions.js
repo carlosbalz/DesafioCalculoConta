@@ -26,10 +26,9 @@ const generatePaymentLinks = () => {
         type: 'GET',
         contentType: 'application/json',
         data: { json: JSON.stringify(orderObject) },
-        async: false,
         success(response) {
             const links = response.result;
-            links.forEach(link => window.open(link, '_blank'));
+            links.forEach(link => $('#linksDiv').append(`<a href="${link}" target="_blank">${link}</a><br>`));
         }
     });
 }
